@@ -1,5 +1,3 @@
-Here’s a **clean, production-quality README.md** tailored to what you’ve built 👇
-
 ***
 
 # 🚀 Spring Monorepo Platform
