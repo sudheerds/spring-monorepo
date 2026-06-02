@@ -9,3 +9,6 @@ logging:
 app:
   env: dev
   region: india  
+spring:
+  application:
+    name: order-service

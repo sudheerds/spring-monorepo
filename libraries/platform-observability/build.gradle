@@ -16,4 +16,5 @@ dependencies {
     implementation libs.spring.boot.starter.web
     implementation libs.spring.boot.starter.actuator // ✅ Fixed: was 'libs.spring.boot.actuator'
     implementation libs.micrometer.prometheus
+    implementation libs.spring.boot.starter.aspectj
 }   
