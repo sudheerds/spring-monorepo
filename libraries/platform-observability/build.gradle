@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'   // ✅ Correct for shared libraries
+}
+
+group = 'com.example.platform'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencies {
+    // ✅ Use the full accessor name as defined in libs.versions.toml
+    implementation libs.spring.boot.starter.web
+    implementation libs.spring.boot.starter.actuator // ✅ Fixed: was 'libs.spring.boot.actuator'
+    implementation libs.micrometer.prometheus
+}   

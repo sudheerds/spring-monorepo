@@ -1,0 +1,80 @@
+tasks.register('createService') {
+    group = 'Setup'
+    description = 'Creates a new Spring Boot service and registers it'
+
+    // ✅ Capture values at Configuration Time (before doLast)
+    def rootDir = layout.projectDirectory.asFile
+    def serviceNameProvider = providers.gradleProperty('serviceName')
+    def packageNameProvider = providers.gradleProperty('packageName').orElse('com.example')
+
+    doLast {
+        // ✅ Read properties at Execution Time using providers
+        def serviceName = serviceNameProvider.orNull
+        def packageName = packageNameProvider.get()
+
+        if (!serviceName) {
+            throw new GradleException("Usage: ./gradlew createService -PserviceName=order-service -PpackageName=com.example.orders")
+        }
+
+        // ✅ Use the captured rootDir instead of project.rootDir
+        def serviceDir = new File(rootDir, "services/${serviceName}")
+        def javaBaseDir = new File(serviceDir, "src/main/java")
+        def packagePath = packageName.replace('.', '/')
+        def srcDir = new File(javaBaseDir, packagePath)
+
+        println "🚀 Creating service: ${serviceName}"
+
+        // ✅ Create directories
+        srcDir.mkdirs()
+        new File(serviceDir, "src/main/resources").mkdirs()
+        new File(serviceDir, "src/test/java/${packagePath}").mkdirs()
+
+        // ✅ Create build.gradle
+        new File(serviceDir, "build.gradle").text = """plugins {
+    id 'java-conventions'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
+}
+
+dependencies {
+    implementation libs.spring.boot.starter.web
+    implementation libs.spring.boot.starter.actuator
+    implementation libs.micrometer.prometheus
+    implementation project(':libraries:platform-observability')
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+    testImplementation libs.spring.boot.starter.test
+}
+"""
+
+        // ✅ Create settings.gradle
+        new File(serviceDir, "settings.gradle").text = "rootProject.name = '${serviceName}'\n"
+
+        // ✅ Create Application Class
+        def className = serviceName.split('-').collect { it.capitalize() }.join('') + 'Application'
+        new File(srcDir, "${className}.java").text = """package ${packageName};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ${className} {
+    public static void main(String[] args) {
+        SpringApplication.run(${className}.class, args);
+    }
+}
+"""
+
+        // ✅ Register in Root settings.gradle
+        def rootSettingsFile = new File(rootDir, "settings.gradle")
+        def includeLine = "include ':services:${serviceName}'"
+        
+        if (!rootSettingsFile.text.contains(includeLine)) {
+            rootSettingsFile.append("\n${includeLine}")
+            println "📝 Registered '${serviceName}' in root settings.gradle"
+        }
+
+        println "✅ Service created successfully!"
+        println "👉 Run: ./gradlew :services:${serviceName}:bootRun"
+    }
+}   

@@ -1,0 +1,16 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+gradlePlugin {
+    plugins {
+        javaConventions {
+            id = 'java-conventions'
+            implementationClass = 'com.example.JavaConventionsPlugin'
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}

@@ -1,0 +1,32 @@
+// ✅ pluginManagement MUST be the first block
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    plugins {
+        id 'org.springframework.boot' version '4.0.6'
+        id 'io.spring.dependency-management' version '1.1.5'
+    }
+}
+
+rootProject.name = 'spring-monorepo'
+
+// Enable Version Catalog for dependencies
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
+// Auto-include services
+file('services').eachDir { dir ->
+    if (new File(dir, 'build.gradle').exists()) {
+        include "services:${dir.name}"
+    }
+}
+
+// Include libraries
+include ':libraries:common-utils'
+include ':libraries:platform-observability'   
+include ':services:order-service'
