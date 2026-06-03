@@ -2,34 +2,34 @@ tasks.register('createService') {
     group = 'Setup'
     description = 'Creates a new Spring Boot service and registers it'
 
-    // ✅ Capture values at Configuration Time (before doLast)
     def rootDir = layout.projectDirectory.asFile
     def serviceNameProvider = providers.gradleProperty('serviceName')
     def packageNameProvider = providers.gradleProperty('packageName').orElse('com.example')
 
     doLast {
-        // ✅ Read properties at Execution Time using providers
         def serviceName = serviceNameProvider.orNull
         def packageName = packageNameProvider.get()
 
         if (!serviceName) {
-            throw new GradleException("Usage: ./gradlew createService -PserviceName=order-service -PpackageName=com.example.orders")
+            throw new GradleException(
+                "Usage: ./gradlew createService -PserviceName=order-service -PpackageName=com.example.orders"
+            )
         }
 
-        // ✅ Use the captured rootDir instead of project.rootDir
         def serviceDir = new File(rootDir, "services/${serviceName}")
         def javaBaseDir = new File(serviceDir, "src/main/java")
         def packagePath = packageName.replace('.', '/')
         def srcDir = new File(javaBaseDir, packagePath)
+        def resourcesDir = new File(serviceDir, "src/main/resources")
 
         println "🚀 Creating service: ${serviceName}"
 
         // ✅ Create directories
         srcDir.mkdirs()
-        new File(serviceDir, "src/main/resources").mkdirs()
+        resourcesDir.mkdirs()
         new File(serviceDir, "src/test/java/${packagePath}").mkdirs()
 
-        // ✅ Create build.gradle
+        // ✅ Create build.gradle using .text
         new File(serviceDir, "build.gradle").text = """plugins {
     id 'java-conventions'
     id 'org.springframework.boot'
@@ -40,24 +40,27 @@ dependencies {
     implementation libs.spring.boot.starter.web
     implementation libs.spring.boot.starter.actuator
     implementation libs.micrometer.prometheus
+    implementation libs.spring.boot.starter.aspectj
+    implementation libs.logstash.logback.encoder
+
     implementation project(':libraries:platform-observability')
+
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     testImplementation libs.spring.boot.starter.test
 }
 """
 
-        // ✅ Create settings.gradle
-        new File(serviceDir, "settings.gradle").text = "rootProject.name = '${serviceName}'\n"
-
-        // ✅ Create Application Class
+        // ✅ Create Application Class using .text
         def className = serviceName.split('-').collect { it.capitalize() }.join('') + 'Application'
         new File(srcDir, "${className}.java").text = """package ${packageName};
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class ${className} {
     public static void main(String[] args) {
         SpringApplication.run(${className}.class, args);
@@ -65,16 +68,52 @@ public class ${className} {
 }
 """
 
-        // ✅ Register in Root settings.gradle
-        def rootSettingsFile = new File(rootDir, "settings.gradle")
-        def includeLine = "include ':services:${serviceName}'"
-        
-        if (!rootSettingsFile.text.contains(includeLine)) {
-            rootSettingsFile.append("\n${includeLine}")
-            println "📝 Registered '${serviceName}' in root settings.gradle"
-        }
+        // ✅ Create application.yml using .text
+        new File(resourcesDir, "application.yml").text = """server:
+  servlet:
+    context-path: /api
 
-        println "✅ Service created successfully!"
+spring:
+  application:
+    name: ${serviceName}
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+
+app:
+  env: dev
+  region: india
+"""
+
+        // ✅ Create logback-spring.xml using .text
+        new File(resourcesDir, "logback-spring.xml").text = """<configuration>
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+    </appender>
+    <root level="INFO">
+        <appender-ref ref="JSON"/>
+    </root>
+</configuration>"""
+
+        new File(serviceDir, "Dockerfile").text = 
+        """FROM eclipse-temurin:21-jdk-alpine
+        WORKDIR /app
+        COPY build/libs/*.jar app.jar
+        EXPOSE 8080
+        ENTRYPOINT ["java","-jar","app.jar"]
+        """
+
+        println "✅ application.yml created with platform defaults"
+        println "✅ logback-spring.xml created"
+        println "✅ Service '${serviceName}' created successfully!"
         println "👉 Run: ./gradlew :services:${serviceName}:bootRun"
     }
 }   

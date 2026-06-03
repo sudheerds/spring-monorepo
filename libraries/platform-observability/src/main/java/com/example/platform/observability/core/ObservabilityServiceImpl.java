@@ -39,7 +39,7 @@ public class ObservabilityServiceImpl implements ObservabilityService {
             T result = supplier.get();
 
             // ✅ SUCCESS COUNTER
-            meterRegistry.counter(operation + ".success",
+            meterRegistry.counter("business.operation.success", "operation",operation + ".success",
                 "env", observabilityProperties.getEnv(),
                         "region", observabilityProperties.getRegion(),
                         "service", serviceName,
@@ -54,7 +54,7 @@ public class ObservabilityServiceImpl implements ObservabilityService {
 
         // ✅ FAILURE COUNTER          
 
-        meterRegistry.counter(operation + ".failure",
+        meterRegistry.counter("business.operation.failure", "operation", operation + ".failure",
         "env", observabilityProperties.getEnv(),
                 "region", observabilityProperties.getRegion(),
                 "service", serviceName,
@@ -68,7 +68,7 @@ public class ObservabilityServiceImpl implements ObservabilityService {
         } finally {
             long duration = System.currentTimeMillis() - startTime;
             // ✅ LATENCY (TIMER)
-            meterRegistry.timer(operation + ".latency",
+            meterRegistry.timer("business.operation.latency", "operation", operation + ".latency",
         "env", observabilityProperties.getEnv(),
                 "region", observabilityProperties.getRegion(),
                 "service", serviceName,

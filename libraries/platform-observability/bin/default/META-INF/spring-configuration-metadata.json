@@ -1,0 +1,25 @@
+{
+  "groups": [
+    {
+      "name": "app",
+      "type": "com.example.platform.observability.config.ObservabilityProperties",
+      "sourceType": "com.example.platform.observability.config.ObservabilityProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.env",
+      "type": "java.lang.String",
+      "sourceType": "com.example.platform.observability.config.ObservabilityProperties"
+    },
+    {
+      "name": "app.region",
+      "type": "java.lang.String",
+      "sourceType": "com.example.platform.observability.config.ObservabilityProperties"
+    }
+  ],
+  "hints": [],
+  "ignored": {
+    "properties": []
+  }
+}

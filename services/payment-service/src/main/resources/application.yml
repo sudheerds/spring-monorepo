@@ -1,0 +1,22 @@
+server:
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: payment-service
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO
+
+app:
+  env: dev
+  region: india
