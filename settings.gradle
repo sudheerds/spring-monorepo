@@ -27,6 +27,7 @@ file('services').eachDir { dir ->
 }
 
 // Include libraries
-include ':libraries:common-utils'
+include ':libraries:platform-utils'
 include ':libraries:platform-observability'   
 include ':services:order-service'
+include ':services:payment-service'
