@@ -1,23 +1,31 @@
 ***
 
+# ✅ ✅ UPDATED README (Production-Aligned)
+
+Here’s a **clean, complete, updated version** 👇
+
+***
+
 # 🚀 Spring Monorepo Platform
 
-A **production-ready Spring Boot monorepo** with built-in:
+A **production-oriented internal developer platform (IDP)** for building Spring Boot microservices with:
 
-* ✅ Service scaffolding (automation)
-* ✅ Shared platform modules
-* ✅ Observability (logging, metrics, traceId)
-* ✅ Gradle multi-module architecture
+✅ Automated service scaffolding  
+✅ Shared platform modules  
+✅ Built-in observability (logs + metrics + tracing)  
+✅ Standardized API and configuration  
+✅ Multi-service local environment
 
 ***
 
 # 🧠 Overview
 
-This repository provides an **internal developer platform** that enables teams to:
+This repository provides a **platform for consistent, scalable microservice development**, enabling teams to:
 
-* Quickly create new microservices
-* Automatically inherit observability and standards
-* Maintain consistency across all services
+* 🚀 Create new services in seconds
+* 📊 Get observability out-of-the-box
+* 📦 Share cross-cutting capabilities via platform modules
+* 🔁 Maintain uniform structure across all services
 
 ***
 
@@ -27,17 +35,21 @@ This repository provides an **internal developer platform** that enables teams t
 spring-monorepo/
 │
 ├── buildSrc/                      # Shared Gradle conventions
-├── gradle/                        # Version catalog (dependency control)
+├── gradle/                        # Version catalog (dependency management)
 │
-├── services/                      # All microservices
-│   └── order-service/             # Example generated service
+├── services/                      # Microservices
+│   ├── order-service/
+│   └── payment-service/
 │
 ├── libraries/
 │   └── platform-observability/    # Shared observability module
 │
-├── build.gradle                   # Service generator task
-├── settings.gradle                # Project wiring
-└── gradlew                        # Gradle wrapper
+├── docker-compose.yml             # Local multi-service environment
+├── prometheus.yml                # Metrics scraping config
+│
+├── build.gradle                   # Root + service generator
+├── settings.gradle                # Module registration
+└── gradlew
 ```
 
 ***
@@ -45,10 +57,12 @@ spring-monorepo/
 # ⚙️ Tech Stack
 
 * Java 21
-* Spring Boot 3.x
-* Gradle 8.x (multi-module)
+* Spring Boot 4.0.6
+* Gradle 8.14 (multi-module)
 * Micrometer + Prometheus
-* SLF4J + MDC
+* Grafana
+* SLF4J + MDC (structured logging)
+* Spring AOP
 
 ***
 
@@ -59,11 +73,12 @@ spring-monorepo/
 ## ✅ Prerequisites
 
 * Java 21
+* Docker + Docker Compose
 * Gradle Wrapper (included)
 
 ***
 
-## ✅ Clone repository
+## ✅ Clone
 
 ```bash
 git clone <your-repo-url>
@@ -72,11 +87,13 @@ cd spring-monorepo
 
 ***
 
-## ✅ Build project
+## ✅ Build
 
 ```bash
 ./gradlew clean build
 ```
+
+***
 
 ***
 
@@ -90,15 +107,17 @@ cd spring-monorepo
 ./gradlew createService -PserviceName=order-service
 ```
 
-(Optional)
+Optional:
 
 ```bash
-./gradlew createService -PserviceName=payment-service -PpackageName=com.example.payment
+./gradlew createService \
+  -PserviceName=payment-service \
+  -PpackageName=com.example.payment
 ```
 
 ***
 
-## ✅ Run service
+## ✅ Run locally (without Docker)
 
 ```bash
 ./gradlew :services:order-service:bootRun
@@ -106,86 +125,188 @@ cd spring-monorepo
 
 ***
 
-## ✅ Test endpoint
+***
 
-```
-http://localhost:8080/ping
-```
+# 🐳 Run Full Environment
 
 ***
 
-# 🔍 Observability Features
+## ✅ Start all services
 
-All services automatically get:
-
-***
-
-## ✅ Logging
-
-* Centralized logging wrapper
-* Consistent log format
-* Execution lifecycle logs
-
-***
-
-## ✅ TraceId (Request Correlation)
-
-* Every request gets a unique `traceId`
-* Included in all logs via MDC
-
-### Example:
-
-```
-INFO  [traceId=abc123] Executing operation: ping
+```bash
+docker compose up --build
 ```
 
 ***
 
-## ✅ Metrics (Micrometer)
+## ✅ Access services
 
-Automatic metrics per operation:
-
-* Success count
-* Failure count
-* Latency (timers)
-
-***
-
-### Example metrics
-
-```
-ping_success
-ping_failure
-ping_latency
-```
+| Service         | URL                     |
+| --------------- | ----------------------- |
+| Order Service   | <http://localhost:8080> |
+| Payment Service | <http://localhost:8081> |
+| Prometheus      | <http://localhost:9090> |
+| Grafana         | <http://localhost:3000> |
 
 ***
 
-## ✅ Global Metric Tags
+***
+
+# 🌐 API Structure
+
+All services follow a **standard API contract**:
+
+***
+
+## ✅ Business APIs
+
+```
+/api/...
+```
+
+Example:
+
+```
+GET  /api/orders
+POST /api/orders
+GET  /api/payments
+```
+
+***
+
+## ✅ System Endpoints (Actuator)
+
+```
+/api/actuator/...
+```
+
+Example:
+
+```
+/api/actuator/health
+/api/actuator/prometheus
+```
+
+***
+
+***
+
+# 🔍 Observability (Built-In)
+
+Every service automatically includes:
+
+***
+
+# ✅ 1. AOP-based Tracking (`@Track`)
+
+```java
+@GetMapping
+@Track("getOrders")
+public String getOrders() {
+    return "orders";
+}
+```
+
+***
+
+👉 Provides:
+
+* automatic logging ✅
+* success/failure metrics ✅
+* latency tracking ✅
+
+***
+
+***
+
+# ✅ 2. Metrics (Micrometer + Prometheus)
+
+***
+
+## 📊 Example metrics
+
+```
+business_operation_success_total
+business_operation_failure_total
+business_operation_latency_seconds
+```
+
+***
+
+## ✅ Labels
 
 All metrics include:
 
-* `env` (environment)
-* `region` (deployment region)
-* `service` (service name)
-* `operation` (business operation)
+* `service`
+* `operation`
+* `env`
+* `region`
 
 ***
 
-### Example:
+***
+
+# ✅ 3. TraceId (Request Correlation)
+
+Every request gets a unique:
 
 ```
-ping_success{env="dev",region="india",service="order-service"}
+traceId ✅
 ```
 
 ***
 
-## ✅ Actuator Endpoints
+👉 Added via filter and injected into logs using MDC.
+
+***
+
+## 📄 Example log
+
+```json
+{
+  "traceId": "abc123",
+  "operation": "getOrders",
+  "status": "success"
+}
+```
+
+***
+
+***
+
+# ✅ 4. Structured Logging
+
+* JSON logs via Logback
+* Standard logging fields
+* Ready for ELK / Loki
+
+***
+
+***
+
+# 📊 Monitoring Stack
+
+***
+
+## ✅ Prometheus
+
+Scrapes metrics from all services:
 
 ```
-/actuator/metrics
-/actuator/prometheus
+/api/actuator/prometheus
 ```
+
+***
+
+## ✅ Grafana
+
+Used for:
+
+* dashboards
+* visualization
+* service comparison
+
+***
 
 ***
 
@@ -193,57 +314,69 @@ ping_success{env="dev",region="india",service="order-service"}
 
 ***
 
-## `platform-observability`
+## 📦 `platform-observability`
 
 Provides:
 
+* `@Track` annotation (AOP-based tracking)
+* `ObservabilityAspect`
 * `ObservabilityService`
-* Logging abstraction
-* Metrics instrumentation
 * TraceId filter (MDC)
+* Metrics instrumentation
 
 ***
 
-## ✅ Usage in services
+## ✅ Benefit
 
-```java
-observabilityService.track("ping", () -> {
-    return "Service is alive ✅";
-});
-```
+Services DO NOT need to handle:
 
-***
-
-👉 No need to manually write:
-
-* logging
-* metrics
-* timing
-* error handling
+* logging ❌
+* metrics ❌
+* tracing ❌
 
 ***
 
-# 🎯 Design Principles
+👉 Platform handles it centrally ✅
 
 ***
 
-## ✅ 1. Centralized Observability
+***
 
-All cross-cutting concerns handled at platform level.
+# 🧠 Design Principles
 
 ***
 
-## ✅ 2. Clean Services
+## ✅ 1. Separation of Concerns
 
-Services contain only business logic.
+| Layer    | Responsibility         |
+| -------- | ---------------------- |
+| Service  | Business logic         |
+| Platform | Cross-cutting concerns |
+| Infra    | Deployment, monitoring |
 
 ***
 
-## ✅ 3. Convention over Configuration
+***
 
-* Standard structure
+## ✅ 2. Convention over Configuration
+
+* Standard API structure (`/api`)
+* Standard observability
 * Standard dependencies
-* Standard metrics
+
+***
+
+***
+
+## ✅ 3. Observable by Default
+
+Every service is:
+
+* measurable ✅
+* traceable ✅
+* debuggable ✅
+
+***
 
 ***
 
@@ -251,47 +384,124 @@ Services contain only business logic.
 
 * Shared libraries
 * Version-controlled dependencies
-* Easy service onboarding
+* Easy onboarding
 
 ***
 
-# 🔮 Future Enhancements
+***
 
-* AOP-based tracking (`@Track`)
+# 🧠 Package Structure
+
+***
+
+```
+com.example
+ ├── orders
+ ├── payment
+ └── platform
+       └── observability
+```
+
+***
+
+👉 Ensures:
+
+* proper component scanning ✅
+* clean separation ✅
+* scalability ✅
+
+***
+
+***
+
+# 🔧 Manual Steps (Local Development)
+
+When adding a new service:
+
+***
+
+## ✅ 1. Add to docker-compose.yml
+
+```yaml
+payment-service:
+  build: ./services/payment-service
+  ports:
+    - "8081:8080"
+```
+
+***
+
+## ✅ 2. Add to prometheus.yml
+
+```yaml
+targets:
+  - order-service:8080
+  - payment-service:8080
+```
+
+***
+
+***
+
+# 🔮 Future Improvements
+
 * OpenTelemetry integration
-* Distributed tracing
-* Grafana dashboards
-* Alerting (Prometheus rules)
+* Distributed tracing (Jaeger)
+* Central log aggregation (ELK / Loki)
+* API Gateway
+* Auth / Security module
+* Kubernetes deployment
+
+***
 
 ***
 
 # 🏁 Summary
 
-This project provides a:
+This platform provides:
 
-✅ Developer-friendly service initializer  
-✅ Consistent observability across services  
-✅ Scalable monorepo architecture
+✅ Rapid service creation  
+✅ Built-in observability  
+✅ Consistent architecture  
+✅ Multi-service environment
+
+***
+
+👉 Designed to evolve into a **production-grade internal developer platform**
+
+***
 
 ***
 
 # 💡 Quick Commands
 
 ```bash
-# build everything
+# build all modules
 ./gradlew build
 
 # create new service
 ./gradlew createService -PserviceName=<name>
 
-# run service
+# run a service
 ./gradlew :services:<name>:bootRun
+
+# run full stack
+docker compose up --build
 ```
+
+***
 
 ***
 
 # 👨‍💻 Author
 
-Built as a **platform engineering initiative** to standardize service development and observability.
+Built as a **platform engineering initiative** to standardize:
+
+* service creation
+* observability
+* architecture consistency
 
 ***
+
+***
+
