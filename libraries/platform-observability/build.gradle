@@ -1,5 +1,6 @@
 plugins {
     id 'java-library'   // ✅ Correct for shared libraries
+    id 'io.spring.dependency-management'
 }
 
 group = 'com.example.platform'
