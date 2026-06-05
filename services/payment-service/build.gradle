@@ -6,10 +6,6 @@ plugins {
 
 dependencies {
     implementation libs.spring.boot.starter.web
-    implementation libs.spring.boot.starter.actuator
-    implementation libs.micrometer.prometheus
-    implementation libs.spring.boot.starter.aspectj
-    implementation libs.logstash.logback.encoder
     implementation project(':libraries:platform-observability')
     compileOnly libs.lombok
     annotationProcessor libs.lombok

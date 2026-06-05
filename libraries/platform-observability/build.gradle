@@ -14,11 +14,11 @@ java {
 
 dependencies {
     // ✅ Use the full accessor name as defined in libs.versions.toml
-    implementation libs.spring.boot.starter.web
-    implementation libs.spring.boot.starter.actuator 
-    implementation libs.micrometer.prometheus
-    implementation libs.spring.boot.starter.aspectj
-    implementation libs.logstash.logback.encoder
+    api libs.spring.boot.starter.web
+    api libs.spring.boot.starter.actuator 
+    api libs.micrometer.prometheus
+    api libs.spring.boot.starter.aspectj
+    api libs.logstash.logback.encoder
     annotationProcessor libs.spring.boot.config.processor
     compileOnly libs.spring.boot.config.processor
 }
