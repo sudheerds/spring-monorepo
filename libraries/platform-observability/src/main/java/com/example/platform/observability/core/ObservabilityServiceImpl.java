@@ -1,5 +1,7 @@
 package com.example.platform.observability.core;
 
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import com.example.platform.observability.config.ObservabilityProperties;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import java.util.concurrent.TimeUnit;
 
 
 
@@ -32,8 +33,7 @@ public class ObservabilityServiceImpl implements ObservabilityService {
 
         long startTime = System.currentTimeMillis();
         log.info("🚀 Executing operation: {}", operation);
-        log.info("MeterRegistry = {}", meterRegistry);
-
+        log.debug("MeterRegistry = {}", meterRegistry);
         try {
 
             T result = supplier.get();

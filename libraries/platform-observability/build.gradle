@@ -18,7 +18,9 @@ dependencies {
     api libs.spring.boot.starter.actuator 
     api libs.micrometer.prometheus
     api libs.spring.boot.starter.aspectj
-    api libs.logstash.logback.encoder
+    api libs.logstash.logback.encoder   
+    api libs.micrometer.tracing.bridge.otel
+    api libs.opentelemetry.exporter.otlp
     annotationProcessor libs.spring.boot.config.processor
     compileOnly libs.spring.boot.config.processor
 }

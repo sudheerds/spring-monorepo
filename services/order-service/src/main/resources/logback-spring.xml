@@ -8,4 +8,10 @@
         <appender-ref ref="JSON"/>
     </root>
 
+    <turboFilter class="ch.qos.logback.classic.turbo.MDCFilter">
+    <MDCKey>requestURI</MDCKey>
+    <Value>/actuator/prometheus</Value>
+    <OnMatch>DENY</OnMatch>
+    </turboFilter>
+
 </configuration>

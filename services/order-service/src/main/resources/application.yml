@@ -7,8 +7,15 @@ management:
         include: "*"      
 
 logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.boot.actuate: INFO
+    com.example.platform.observability: INFO
+
   pattern:
     level: "%5p [traceId=%X{traceId}]"
+
 
 app:
   env: dev
