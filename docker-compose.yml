@@ -20,7 +20,8 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
-      - '--log.level=warn'  
+    - "--config.file=/etc/prometheus/prometheus.yml"
+    - '--log.level=warn'  
     depends_on:
       - order-service
       - payment-service
