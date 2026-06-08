@@ -1,4 +1,4 @@
-package com.example.platform.observability.core;
+package com.example.observability.core;
 
 import java.util.concurrent.TimeUnit;
 
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.example.platform.observability.config.ObservabilityProperties;
+import com.example.observability.config.ObservabilityProperties;
 
 import io.micrometer.core.instrument.MeterRegistry;
 

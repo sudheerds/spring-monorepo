@@ -1,4 +1,4 @@
-package com.example.platform.observability.logging;
+package com.example.observability.logging;
 
 
 public class LoggingConfig {

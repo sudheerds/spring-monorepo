@@ -1,4 +1,4 @@
-package com.example.platform.observability.core;
+package com.example.observability.core;
 
 @FunctionalInterface
 public interface SupplierWithException<T> {

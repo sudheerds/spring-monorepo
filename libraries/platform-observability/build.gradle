@@ -3,7 +3,7 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
-group = 'com.example.platform'
+group = 'com.example.platfrom.observability'
 version = '1.0.0'
 
 java {
@@ -13,14 +13,17 @@ java {
 }
 
 dependencies {
-    // ✅ Use the full accessor name as defined in libs.versions.toml
-    api libs.spring.boot.starter.web
-    api libs.spring.boot.starter.actuator 
-    api libs.micrometer.prometheus
+    // ✅ EXPOSED
     api libs.spring.boot.starter.aspectj
-    api libs.logstash.logback.encoder   
     api libs.micrometer.tracing.bridge.otel
-    api libs.opentelemetry.exporter.otlp
+    api libs.micrometer.prometheus
+
+    // ✅ INTERNAL
+    implementation libs.spring.boot.starter.web
+    implementation libs.spring.boot.starter.actuator
+    implementation libs.logstash.logback.encoder
+    implementation libs.opentelemetry.exporter.otlp
+
     annotationProcessor libs.spring.boot.config.processor
     compileOnly libs.spring.boot.config.processor
 }

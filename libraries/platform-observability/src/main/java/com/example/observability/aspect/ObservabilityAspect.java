@@ -1,10 +1,12 @@
-package com.example.platform.observability.aspect;
+package com.example.observability.aspect;
 
-import com.example.platform.observability.annotation.Track;
-import com.example.platform.observability.core.ObservabilityService;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+
+import com.example.observability.annotation.Track;
+import com.example.observability.core.ObservabilityService;
 
 @Aspect
 @Component

@@ -1,4 +1,4 @@
-package com.example.platform.observability.config;
+package com.example.observability.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

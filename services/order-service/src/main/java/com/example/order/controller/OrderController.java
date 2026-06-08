@@ -1,10 +1,11 @@
 package com.example.order.controller;
 
-import com.example.platform.observability.annotation.Track;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.observability.annotation.Track;
 
 @RestController
 @RequestMapping("/orders")
