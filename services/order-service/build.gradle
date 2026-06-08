@@ -4,6 +4,9 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
+group = 'com.example.services.order'
+version = '1.0.0'
+
 dependencies {
     implementation libs.spring.boot.starter.web
     implementation project(':libraries:platform-observability')
