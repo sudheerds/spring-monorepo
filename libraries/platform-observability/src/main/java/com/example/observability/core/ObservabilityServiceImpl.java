@@ -64,6 +64,9 @@ public class ObservabilityServiceImpl implements ObservabilityService {
 
         log.error("❌ Operation failed: {}", operation, e);
 
+        if (e instanceof RuntimeException runtimeException) {
+            throw runtimeException;
+        }
         throw new RuntimeException(e);
 
         } finally {

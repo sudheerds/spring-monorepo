@@ -30,5 +30,7 @@ file('services').eachDir { dir ->
 include ':libraries:platform-utils'
 include ':libraries:platform-observability'   
 include ':libraries:platform-security'
+include ':libraries:platform-exceptions'
+include ':libraries:platform-client'
 include ':services:order-service'
 include ':services:payment-service'

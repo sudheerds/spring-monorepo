@@ -1,5 +1,68 @@
 # Ignore Gradle project-specific cache directory
-.gradle
+.gradle/
 
-# Ignore Gradle build output directory
-build
+# Ignore build and compilation outputs
+build/
+bin/
+out/
+classes/
+dependency-reduced-pom.xml
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Crash daemon logs
+hs_err_pid*
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Virtual environments
+.env
+.env.local
+.env.*.local
+
+# IDEs and Editors #
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Eclipse
+.metadata/
+.classpath
+.project
+.settings/
+.factorypath
+
+# NetBeans
+nbproject/private/
+nbbuild/
+dist/
+nbdist/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Operating System Files #
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini

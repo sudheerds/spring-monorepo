@@ -7,6 +7,7 @@ services:
       - "8080:8080"
     environment:
       - KEYCLOAK_JWKS_URI=http://keycloak:8080/realms/example/protocol/openid-connect/certs
+      - APP_SERVICES_PAYMENT_URL=http://payment-service:8080/api
 
   payment-service:
     build: ./services/payment-service

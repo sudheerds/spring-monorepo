@@ -3,7 +3,7 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
-group = 'com.example.platform.security'
+group = 'com.example.platform.exceptions'
 version = '1.0.0'
 
 java {
@@ -14,6 +14,7 @@ java {
 
 dependencies {
     implementation libs.spring.boot.starter.web
-    api libs.spring.boot.starter.security
-    api libs.spring.boot.starter.oauth2.resource.server
+    compileOnly libs.spring.boot.starter.security
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
 }

@@ -26,6 +26,8 @@ public class ObservabilityAspect {
         return observabilityService.track(operation, () -> {
             try {
                 return joinPoint.proceed();
+            } catch (RuntimeException runtimeException) {
+                throw runtimeException;
             } catch (Throwable throwable) {
                 throw new RuntimeException(throwable);
             }

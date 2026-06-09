@@ -26,10 +26,4 @@ public class PaymentController {
         return "Payment created ✅";
     }
 
-    @GetMapping("/fail")
-    @Track("fail")
-    public String fail() {
-        return "Payment failure ❌";
-    }
-
 }
