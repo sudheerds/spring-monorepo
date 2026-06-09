@@ -10,6 +10,7 @@ version = '1.0.0'
 dependencies {
     implementation libs.spring.boot.starter.web
     implementation project(':libraries:platform-observability')
+    implementation project(':libraries:platform-security')
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     testImplementation libs.spring.boot.starter.test

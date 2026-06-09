@@ -24,6 +24,11 @@ app:
 spring:
   application:
     name: order-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:8082/realms/example/protocol/openid-connect/certs}
 
 server:
   servlet:

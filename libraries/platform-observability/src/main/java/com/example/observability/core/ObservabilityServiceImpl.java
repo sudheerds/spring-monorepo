@@ -20,6 +20,7 @@ public class ObservabilityServiceImpl implements ObservabilityService {
     private static final Logger log = LoggerFactory.getLogger(ObservabilityServiceImpl.class);
     private final MeterRegistry meterRegistry;
     private final ObservabilityProperties observabilityProperties;
+    
     @Value("${spring.application.name:unknown}")
     private String serviceName;
 
