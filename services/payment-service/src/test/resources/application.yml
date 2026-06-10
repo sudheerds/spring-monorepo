@@ -18,6 +18,13 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:8082/realms/example/protocol/openid-connect/certs}
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
+app:
+  messaging:
+    enabled: false
 
 logging:
   level:

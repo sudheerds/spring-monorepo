@@ -1,0 +1,47 @@
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: "*"      
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.boot.actuate: INFO
+    com.example.platform.observability: INFO
+
+  pattern:
+    level: "%5p [traceId=%X{traceId}]"
+
+app:
+  env: dev
+  region: india  
+
+spring:
+  application:
+    name: notification-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:8082/realms/example/protocol/openid-connect/certs}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/notificationdb}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  flyway:
+    enabled: true
+
+server:
+  servlet:
+    context-path: /api 

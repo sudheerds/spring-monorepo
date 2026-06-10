@@ -4,7 +4,7 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
-group = 'com.example.services.payment'
+group = 'com.example.services.notification'
 version = '1.0.0'
 
 dependencies {
@@ -13,7 +13,6 @@ dependencies {
     implementation project(':libraries:platform-security')
     implementation project(':libraries:platform-exceptions')
     implementation project(':libraries:platform-jpa')
-    implementation project(':libraries:platform-messaging')
     runtimeOnly libs.postgresql
     testRuntimeOnly libs.h2
 

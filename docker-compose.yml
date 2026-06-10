@@ -11,6 +11,16 @@ services:
     volumes:
       - postgres_data_v18:/var/lib/postgresql
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
   order-service:
     build: ./services/order-service
     container_name: order-service
@@ -22,9 +32,12 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/orderdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
     depends_on:
       - postgres
       - keycloak
+      - rabbitmq
 
   payment-service:
     build: ./services/payment-service
@@ -36,9 +49,29 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/paymentdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
     depends_on:
       - postgres
       - keycloak
+      - rabbitmq
+
+  notification-service:
+    build: ./services/notification-service
+    container_name: notification-service
+    ports:
+      - "8083:8080"
+    environment:
+      - KEYCLOAK_JWKS_URI=http://keycloak:8080/realms/example/protocol/openid-connect/certs
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/notificationdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+    depends_on:
+      - postgres
+      - keycloak
+      - rabbitmq
 
   prometheus:
     image: prom/prometheus
@@ -53,6 +86,7 @@ services:
     depends_on:
       - order-service
       - payment-service
+      - notification-service
     
   grafana:
     image: grafana/grafana
@@ -78,4 +112,6 @@ services:
 
 volumes:
   postgres_data_v18:
+
+
      

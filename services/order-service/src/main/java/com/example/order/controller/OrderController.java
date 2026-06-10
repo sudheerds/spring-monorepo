@@ -2,7 +2,10 @@ package com.example.order.controller;
 
 import com.example.order.entity.Order;
 import com.example.order.repository.OrderRepository;
+import com.example.order.event.OrderCreatedEvent;
+import com.example.order.config.OrderMessagingConfig;
 import com.example.observability.annotation.Track;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +23,15 @@ public class OrderController {
 
     private final RestClient paymentClient;
     private final OrderRepository orderRepository;
+    private final RabbitTemplate rabbitTemplate;
 
     public OrderController(RestClient.Builder restClientBuilder, 
                            OrderRepository orderRepository,
+                           RabbitTemplate rabbitTemplate,
                            @Value("${app.services.payment.url:http://localhost:8081/api}") String paymentServiceUrl) {
         this.paymentClient = restClientBuilder.baseUrl(paymentServiceUrl).build();
         this.orderRepository = orderRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @GetMapping("/getOrders")
@@ -43,7 +49,14 @@ public class OrderController {
         Order order = new Order();
         order.setProduct(product);
         order.setPrice(price);
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+        try {
+            OrderCreatedEvent event = new OrderCreatedEvent(savedOrder.getId(), savedOrder.getProduct(), savedOrder.getPrice());
+            rabbitTemplate.convertAndSend(OrderMessagingConfig.EXCHANGE, OrderMessagingConfig.ROUTING_KEY, event);
+        } catch (Exception e) {
+            // Log warning/error
+        }
+        return savedOrder;
     }
 
     @GetMapping("/test-payment-call")
