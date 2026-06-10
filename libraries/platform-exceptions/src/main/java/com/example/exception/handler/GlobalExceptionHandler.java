@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,30 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex,
+            HttpServletRequest request) {
+        log.warn("Constraint violation occurred for request: {}", request.getRequestURI());
+        List<ErrorResponse.FieldError> fieldErrors = ex.getConstraintViolations().stream()
+                .map(violation -> {
+                    String propertyPath = violation.getPropertyPath().toString();
+                    String field = propertyPath.substring(propertyPath.lastIndexOf('.') + 1);
+                    return new ErrorResponse.FieldError(field, violation.getMessage());
+                })
+                .collect(Collectors.toList());
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(Instant.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .message("Validation failed")
+                .path(request.getRequestURI())
+                .code("VALIDATION_ERROR")
+                .fieldErrors(fieldErrors)
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler(DomainException.class)
     public ResponseEntity<ErrorResponse> handleDomainException(DomainException ex, HttpServletRequest request) {

@@ -13,6 +13,7 @@ dependencies {
     implementation project(':libraries:platform-security')
     implementation project(':libraries:platform-exceptions')
     implementation project(':libraries:platform-jpa')
+    implementation project(':libraries:platform-validation')
     runtimeOnly libs.postgresql
     testRuntimeOnly libs.h2
 

@@ -1,0 +1,23 @@
+plugins {
+    id 'java-library'
+    id 'io.spring.dependency-management'
+}
+
+group = 'com.example.platform.validation'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${libs.versions.spring.boot.get()}"
+    }
+}
+
+dependencies {
+    api libs.spring.boot.starter.validation
+}

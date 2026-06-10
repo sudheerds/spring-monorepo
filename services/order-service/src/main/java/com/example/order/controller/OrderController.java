@@ -7,7 +7,11 @@ import com.example.order.config.OrderMessagingConfig;
 import com.example.observability.annotation.Track;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import com.example.validation.annotation.Alphanumeric;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
+@Validated
 public class OrderController {
 
     private final RestClient paymentClient;
@@ -44,8 +49,9 @@ public class OrderController {
     @PostMapping("/createOrder")
     @PreAuthorize("hasRole('ADMIN')")
     @Track("createOrder")
-    public Order createOrder(@RequestParam(defaultValue = "Shoes") String product, 
-                             @RequestParam(defaultValue = "120.0") Double price) {
+    public Order createOrder(@RequestParam @NotBlank(message = "Product name cannot be blank") 
+                             @Alphanumeric(message = "Product name must be alphanumeric") String product, 
+                             @RequestParam @Positive(message = "Price must be positive") Double price) {
         Order order = new Order();
         order.setProduct(product);
         order.setPrice(price);
