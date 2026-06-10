@@ -21,6 +21,14 @@ logstash-logback-encoder = { module = "net.logstash.logback:logstash-logback-enc
 micrometer-tracing-bridge-otel = { group = "io.micrometer", name = "micrometer-tracing-bridge-otel", version.ref = "micrometerTracing" }
 opentelemetry-exporter-otlp = { group = "io.opentelemetry", name = "opentelemetry-exporter-otlp", version.ref = "opentelemetry" }
 
+# Database & Migrations
+spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "spring-boot" }
+postgresql = { group = "org.postgresql", name = "postgresql", version = "42.7.3" }
+h2 = { group = "com.h2database", name = "h2", version = "2.2.224" }
+flyway-core = { group = "org.flywaydb", name = "flyway-core", version = "10.10.0" }
+flyway-database-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql", version = "10.10.0" }
+spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway", version.ref = "spring-boot" }
+
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

@@ -12,6 +12,10 @@ dependencies {
     implementation project(':libraries:platform-observability')
     implementation project(':libraries:platform-security')
     implementation project(':libraries:platform-exceptions')
+    implementation project(':libraries:platform-jpa')
+    runtimeOnly libs.postgresql
+    testRuntimeOnly libs.h2
+
     compileOnly libs.lombok
     annotationProcessor libs.lombok
     testImplementation libs.spring.boot.starter.test

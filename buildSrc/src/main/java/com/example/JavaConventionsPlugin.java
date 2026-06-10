@@ -23,6 +23,9 @@ public class JavaConventionsPlugin implements Plugin<Project> {
 
         project.getTasks().withType(Test.class).configureEach(test -> {
             test.useJUnitPlatform();
+            test.testLogging(logging -> {
+                logging.setShowStandardStreams(true);
+            });
         });
     }
 }

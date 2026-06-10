@@ -10,6 +10,20 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${KEYCLOAK_JWKS_URI:http://localhost:8082/realms/example/protocol/openid-connect/certs}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/paymentdb}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  flyway:
+    enabled: true
 
 management:
   endpoints:

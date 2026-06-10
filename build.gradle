@@ -27,6 +27,7 @@ tasks.register('createService') {
         // ✅ Create directories
         srcDir.mkdirs()
         resourcesDir.mkdirs()
+        new File(resourcesDir, "db/migration").mkdirs()
         new File(serviceDir, "src/test/java/${packagePath}").mkdirs()
 
         // ✅ Create build.gradle using .text
