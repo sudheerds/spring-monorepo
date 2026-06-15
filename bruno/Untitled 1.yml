@@ -1,0 +1,22 @@
+info:
+  name: validateContact
+  type: http
+  seq: 16
+
+http:
+  method: POST
+  url: http://localhost:8083/api/notifications/validateContact
+  body:
+    type: form-urlencoded
+    data:
+      - name: phone
+        value: +447911123456
+      - name: password
+        value: SecurePass123!
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

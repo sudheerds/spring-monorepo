@@ -1,0 +1,22 @@
+info:
+  name: doPayment
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: http://localhost:8081/api/payments/doPayment
+  body:
+    type: form-urlencoded
+    data:
+      - name: amount
+        value: "100.0"
+      - name: status
+        value: SUCCESS
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

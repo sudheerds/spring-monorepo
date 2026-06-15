@@ -1,0 +1,34 @@
+info:
+  name: Auth Token - ADMIN
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:8082/realms/example/protocol/openid-connect/token
+  body:
+    type: form-urlencoded
+    data:
+      - name: client_id
+        value: monorepo-client
+      - name: username
+        value: bob
+      - name: password
+        value: password
+      - name: grant_type
+        value: password
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const resBody = res.getBody();
+        // Saves the token to a variable named 'bearer_token'
+        bru.setVar("bearer_token", resBody.access_token);
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
