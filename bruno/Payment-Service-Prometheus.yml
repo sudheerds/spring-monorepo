@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8081/api/actuator/prometheus
+  url: http://localhost:8080/api/payments/actuator/prometheus
   auth: inherit
 
 

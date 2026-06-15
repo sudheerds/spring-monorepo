@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8081/api/payments/fail
+  url: http://localhost:8080/api/payments/fail
   auth: inherit
 
 settings:

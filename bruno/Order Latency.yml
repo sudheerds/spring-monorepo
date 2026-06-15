@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8080/api/actuator/metrics/business.operation.latency
+  url: http://localhost:8080/api/orders/actuator/metrics/business.operation.latency
   auth: inherit
 
 settings:

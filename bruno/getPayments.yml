@@ -5,7 +5,7 @@ info:
 
 http:
   method: GET
-  url: http://localhost:8081/api/payments/getPayments
+  url: http://localhost:8080/api/payments/getPayments
   auth: inherit
 
 settings:

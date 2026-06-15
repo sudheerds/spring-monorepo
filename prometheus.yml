@@ -5,7 +5,19 @@ scrape_configs:
   - job_name: 'order-service'
     metrics_path: '/api/actuator/prometheus'
     static_configs:
-      - targets: 
-        - order-service:8080
-        - payment-service:8080
-        - notification-service:8080
+      - targets: ['order-service:8080']
+
+  - job_name: 'payment-service'
+    metrics_path: '/api/actuator/prometheus'
+    static_configs:
+      - targets: ['payment-service:8080']
+
+  - job_name: 'notification-service'
+    metrics_path: '/api/actuator/prometheus'
+    static_configs:
+      - targets: ['notification-service:8080']
+
+  - job_name: 'api-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['api-gateway:8080']
